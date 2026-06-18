@@ -40,7 +40,7 @@
           <div class="scale-area" id="scale-area">
             <div class="empty-state" id="empty-state">Введите ширину и высоту</div>
 
-            <div class="frame-wrap" id="frame-wrap" aria-hidden="true">
+            <div class="frame-wrap" id="frame-wrap" role="group" aria-label="Кадр с изменяемым размером">
               <div class="frame"></div>
               <svg class="diagonals" viewBox="0 0 100 100" preserveAspectRatio="none" focusable="false">
                 <line x1="0" y1="0" x2="100" y2="100"></line>
@@ -62,6 +62,14 @@
               <span class="dimension-label width-label" id="width-label">1920</span>
               <span class="dimension-label height-label" id="height-label">1080</span>
               <span class="center-label" id="center-label">1920x1080</span>
+              <button class="resize-handle handle-nw" type="button" data-resize="nw" aria-label="Изменить размер от левого верхнего угла"></button>
+              <button class="resize-handle handle-n" type="button" data-resize="n" aria-label="Изменить высоту сверху"></button>
+              <button class="resize-handle handle-ne" type="button" data-resize="ne" aria-label="Изменить размер от правого верхнего угла"></button>
+              <button class="resize-handle handle-e" type="button" data-resize="e" aria-label="Изменить ширину справа"></button>
+              <button class="resize-handle handle-se" type="button" data-resize="se" aria-label="Изменить размер от правого нижнего угла"></button>
+              <button class="resize-handle handle-s" type="button" data-resize="s" aria-label="Изменить высоту снизу"></button>
+              <button class="resize-handle handle-sw" type="button" data-resize="sw" aria-label="Изменить размер от левого нижнего угла"></button>
+              <button class="resize-handle handle-w" type="button" data-resize="w" aria-label="Изменить ширину слева"></button>
             </div>
           </div>
         </section>
@@ -85,13 +93,14 @@
         </section>
 
         <section class="controls" aria-label="Размер кадра">
-          <label class="field" for="width-input">
-            <span>Ширина</span>
+          <div class="field">
+            <label class="field-label" for="width-input">Ширина</label>
             <span class="input-shell">
               <input id="width-input" inputmode="numeric" autocomplete="off" value="1920" />
-              <span>px</span>
+              <button class="copy-button" type="button" data-copy-size="width" aria-label="Скопировать ширину" title="Скопировать ширину">⧉</button>
+              <span class="unit">px</span>
             </span>
-          </label>
+          </div>
 
           <button class="icon-button" id="swap-button" type="button" aria-label="Поменять ширину и высоту" title="Поменять местами">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -102,13 +111,14 @@
             </svg>
           </button>
 
-          <label class="field" for="height-input">
-            <span>Высота</span>
+          <div class="field">
+            <label class="field-label" for="height-input">Высота</label>
             <span class="input-shell">
               <input id="height-input" inputmode="numeric" autocomplete="off" value="1080" />
-              <span>px</span>
+              <button class="copy-button" type="button" data-copy-size="height" aria-label="Скопировать высоту" title="Скопировать высоту">⧉</button>
+              <span class="unit">px</span>
             </span>
-          </label>
+          </div>
         </section>
 
         <section class="presets-section" aria-labelledby="presets-title">

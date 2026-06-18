@@ -11,6 +11,10 @@ const presets = [
   { label: "2.39:1", w: 2389, h: 1000 },
 ];
 
+const MIN_SIZE = 1;
+const MAX_SIZE = 999999;
+const COPY_ICON = "⧉";
+
 const elements = {
   area: document.querySelector("#scale-area"),
   frame: document.querySelector("#frame-wrap"),
@@ -26,8 +30,12 @@ const elements = {
   orientationValue: document.querySelector("#orientation-value"),
   orientationGlyph: document.querySelector("#orientation-glyph"),
   swapButton: document.querySelector("#swap-button"),
+  copyButtons: document.querySelectorAll("[data-copy-size]"),
+  resizeHandles: document.querySelectorAll("[data-resize]"),
   presets: document.querySelector("#presets"),
 };
+
+let activeResize = null;
 
 function gcd(a, b) {
   return b === 0 ? a : gcd(b, a % b);
@@ -55,6 +63,10 @@ function clean(value) {
   return value.replace(/[^\d]/g, "").slice(0, 6);
 }
 
+function clampSize(value) {
+  return Math.min(MAX_SIZE, Math.max(MIN_SIZE, Math.round(value)));
+}
+
 function getSize() {
   const w = Number.parseInt(elements.widthInput.value, 10) || 0;
   const h = Number.parseInt(elements.heightInput.value, 10) || 0;
@@ -76,6 +88,16 @@ function fitFrame(w, h) {
     fw: Math.max(0, w * scale),
     fh: Math.max(0, h * scale),
   };
+}
+
+function setSize(w, h) {
+  elements.widthInput.value = String(clampSize(w));
+  elements.heightInput.value = String(clampSize(h));
+  render();
+}
+
+function eventPoint(event) {
+  return event.touches?.[0] || event.changedTouches?.[0] || event;
 }
 
 function updateGlyph(w, h) {
@@ -127,6 +149,132 @@ function render() {
   updatePresetState(w, h);
 }
 
+async function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return;
+    } catch {
+      // Fall through to the textarea fallback.
+    }
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.top = "-999px";
+  document.body.append(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  textarea.remove();
+}
+
+function showCopied(button) {
+  button.classList.add("copied");
+  button.textContent = "✓";
+  window.setTimeout(() => {
+    button.classList.remove("copied");
+    button.textContent = COPY_ICON;
+  }, 900);
+}
+
+function startResize(event) {
+  if (activeResize) return;
+  if ((event.type === "mousedown" || event.pointerType === "mouse") && event.button !== 0) return;
+
+  const { w, h, valid } = getSize();
+  if (!valid) return;
+
+  const point = eventPoint(event);
+  const { fw, fh } = fitFrame(w, h);
+  const scale = Math.max(fw / w || 0, fh / h || 0, 0.0001);
+  const mode = event.type.startsWith("pointer") ? "pointer" : event.type.startsWith("touch") ? "touch" : "mouse";
+
+  activeResize = {
+    handle: event.currentTarget.dataset.resize,
+    mode,
+    pointerId: event.pointerId ?? null,
+    startX: point.clientX,
+    startY: point.clientY,
+    startW: w,
+    startH: h,
+    scale,
+  };
+
+  if (mode === "pointer") {
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+  }
+  bindResizeMove(activeResize.mode);
+  document.body.classList.add("is-resizing");
+  event.preventDefault();
+}
+
+function moveResize(event) {
+  if (!activeResize) return;
+  if (activeResize.mode === "pointer" && event.pointerId !== activeResize.pointerId) return;
+
+  const point = eventPoint(event);
+  const dx = (point.clientX - activeResize.startX) / activeResize.scale;
+  const dy = (point.clientY - activeResize.startY) / activeResize.scale;
+  let nextW = activeResize.startW;
+  let nextH = activeResize.startH;
+
+  if (activeResize.handle.includes("e")) nextW = activeResize.startW + dx;
+  if (activeResize.handle.includes("w")) nextW = activeResize.startW - dx;
+  if (activeResize.handle.includes("s")) nextH = activeResize.startH + dy;
+  if (activeResize.handle.includes("n")) nextH = activeResize.startH - dy;
+
+  setSize(nextW, nextH);
+  event.preventDefault();
+}
+
+function endResize(event) {
+  if (!activeResize) return;
+  if (activeResize.mode === "pointer" && event.pointerId !== activeResize.pointerId) return;
+  unbindResizeMove(activeResize.mode);
+  activeResize = null;
+  document.body.classList.remove("is-resizing");
+}
+
+function bindResizeMove(mode) {
+  if (mode === "pointer") {
+    document.addEventListener("pointermove", moveResize);
+    document.addEventListener("pointerup", endResize);
+    document.addEventListener("pointercancel", endResize);
+    return;
+  }
+
+  if (mode === "touch") {
+    document.addEventListener("touchmove", moveResize, { passive: false });
+    document.addEventListener("touchend", endResize);
+    document.addEventListener("touchcancel", endResize);
+    return;
+  }
+
+  document.addEventListener("mousemove", moveResize);
+  document.addEventListener("mouseup", endResize);
+}
+
+function unbindResizeMove(mode) {
+  if (mode === "pointer") {
+    document.removeEventListener("pointermove", moveResize);
+    document.removeEventListener("pointerup", endResize);
+    document.removeEventListener("pointercancel", endResize);
+    return;
+  }
+
+  if (mode === "touch") {
+    document.removeEventListener("touchmove", moveResize);
+    document.removeEventListener("touchend", endResize);
+    document.removeEventListener("touchcancel", endResize);
+    return;
+  }
+
+  document.removeEventListener("mousemove", moveResize);
+  document.removeEventListener("mouseup", endResize);
+}
+
 function renderPresets() {
   const fragment = document.createDocumentFragment();
 
@@ -162,6 +310,20 @@ function bindInputs() {
     elements.widthInput.value = elements.heightInput.value;
     elements.heightInput.value = width;
     render();
+  });
+
+  elements.copyButtons.forEach((button) => {
+    button.addEventListener("click", async () => {
+      const input = button.dataset.copySize === "width" ? elements.widthInput : elements.heightInput;
+      await copyText(input.value);
+      showCopied(button);
+    });
+  });
+
+  elements.resizeHandles.forEach((handle) => {
+    handle.addEventListener("pointerdown", startResize);
+    handle.addEventListener("mousedown", startResize);
+    handle.addEventListener("touchstart", startResize, { passive: false });
   });
 }
 
