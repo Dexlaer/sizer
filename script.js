@@ -334,3 +334,9 @@ render();
 const resizeObserver = new ResizeObserver(render);
 resizeObserver.observe(elements.area);
 window.addEventListener("orientationchange", render);
+
+if ("serviceWorker" in navigator && window.location.protocol !== "file:") {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  });
+}

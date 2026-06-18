@@ -5,14 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Sizer — визуализатор пропорций кадра: ширина, высота, ориентация, мегапиксели и быстрые форматы."
+      content="Размер кадра — быстрый расчет пропорций, ориентации и мегапикселей по ширине и высоте."
     />
     <meta name="theme-color" content="#0e0f13" />
-    <meta property="og:title" content="Sizer" />
-    <meta property="og:description" content="Визуализатор пропорций кадра для фото, видео и дизайна." />
+    <meta name="application-name" content="Размер кадра" />
+    <meta name="apple-mobile-web-app-title" content="Размер кадра" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta property="og:title" content="Размер кадра" />
+    <meta property="og:description" content="Быстрый расчет пропорций, ориентации и мегапикселей по ширине и высоте." />
     <meta property="og:type" content="website" />
-    <title>Sizer</title>
+    <title>Размер кадра</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -25,14 +32,14 @@
     <main class="page">
       <section class="tool" aria-labelledby="app-title">
         <header class="intro">
-          <div class="eyebrow">Визуализатор пропорций</div>
+          <div class="eyebrow">Калькулятор формата</div>
           <div class="title-row">
-            <h1 id="app-title">Sizer</h1>
+            <h1 id="app-title">Размер кадра</h1>
             <div class="live-chip" aria-live="polite">
               <span id="chip-ratio">16 : 9</span>
             </div>
           </div>
-          <p>Формат кадра для фото, видео, дизайна и соцсетей.</p>
+          <p>Введите ширину и высоту или потяните рамку — сайт покажет пропорции, ориентацию и мегапиксели.</p>
         </header>
 
         <section class="viewport" aria-label="Предпросмотр формата кадра">
@@ -125,6 +132,13 @@
           <h2 id="presets-title">Быстрые форматы</h2>
           <div class="presets" id="presets"></div>
         </section>
+
+        <footer class="support">
+          <span>Спасибо за использование</span>
+          <a class="support-button" href="https://github.com/sponsors/Dexlaer" target="_blank" rel="noopener noreferrer">
+            Поддержать автора
+          </a>
+        </footer>
       </section>
     </main>
 

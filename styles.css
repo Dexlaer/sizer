@@ -102,9 +102,9 @@ p {
 }
 
 h1 {
-  font-size: clamp(38px, 10vw, 72px);
+  font-size: clamp(38px, 8vw, 64px);
   font-weight: 700;
-  line-height: 0.92;
+  line-height: 0.98;
 }
 
 .intro p {
@@ -695,6 +695,46 @@ body.is-resizing .frame-wrap {
   color: var(--amber);
 }
 
+.support {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.support-button {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(245, 165, 36, 0.46);
+  border-radius: 8px;
+  background: rgba(245, 165, 36, 0.1);
+  color: var(--amber);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 14px;
+  text-decoration: none;
+  transition:
+    border-color 150ms ease,
+    background 150ms ease,
+    transform 150ms ease;
+}
+
+.support-button:hover {
+  border-color: rgba(245, 165, 36, 0.82);
+  background: rgba(245, 165, 36, 0.16);
+}
+
+.support-button:active {
+  transform: translateY(1px);
+}
+
 :focus-visible {
   outline: 2px solid var(--amber);
   outline-offset: 3px;
@@ -708,6 +748,10 @@ body.is-resizing .frame-wrap {
 
   .title-row {
     align-items: start;
+  }
+
+  h1 {
+    max-width: 300px;
   }
 
   .intro p {
@@ -765,6 +809,14 @@ body.is-resizing .frame-wrap {
 
   .metric {
     padding: 12px;
+  }
+
+  .support {
+    display: grid;
+  }
+
+  .support-button {
+    width: 100%;
   }
 }
 
