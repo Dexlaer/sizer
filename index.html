@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Sizer — визуализатор пропорций кадра: ширина, высота, ориентация, мегапиксели и быстрые форматы."
+    />
+    <meta name="theme-color" content="#0e0f13" />
+    <meta property="og:title" content="Sizer" />
+    <meta property="og:description" content="Визуализатор пропорций кадра для фото, видео и дизайна." />
+    <meta property="og:type" content="website" />
+    <title>Sizer</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="tool" aria-labelledby="app-title">
+        <header class="intro">
+          <div class="eyebrow">Визуализатор пропорций</div>
+          <div class="title-row">
+            <h1 id="app-title">Sizer</h1>
+            <div class="live-chip" aria-live="polite">
+              <span id="chip-ratio">16 : 9</span>
+            </div>
+          </div>
+          <p>Формат кадра для фото, видео, дизайна и соцсетей.</p>
+        </header>
+
+        <section class="viewport" aria-label="Предпросмотр формата кадра">
+          <div class="grid-bg" aria-hidden="true"></div>
+          <div class="scale-area" id="scale-area">
+            <div class="empty-state" id="empty-state">Введите ширину и высоту</div>
+
+            <div class="frame-wrap" id="frame-wrap" aria-hidden="true">
+              <div class="frame"></div>
+              <svg class="diagonals" viewBox="0 0 100 100" preserveAspectRatio="none" focusable="false">
+                <line x1="0" y1="0" x2="100" y2="100"></line>
+                <line x1="100" y1="0" x2="0" y2="100"></line>
+              </svg>
+              <span class="bracket top-left"></span>
+              <span class="bracket top-right"></span>
+              <span class="bracket bottom-left"></span>
+              <span class="bracket bottom-right"></span>
+
+              <div class="dim dim-x">
+                <span class="tick start"></span>
+                <span class="tick end"></span>
+              </div>
+              <div class="dim dim-y">
+                <span class="tick start"></span>
+                <span class="tick end"></span>
+              </div>
+              <span class="dimension-label width-label" id="width-label">1920</span>
+              <span class="dimension-label height-label" id="height-label">1080</span>
+              <span class="center-label" id="center-label">1920x1080</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="readout" aria-label="Параметры кадра">
+          <article class="metric">
+            <span class="metric-label">Пропорции</span>
+            <strong id="ratio-value">16 : 9</strong>
+          </article>
+          <article class="metric">
+            <span class="metric-label">Ориентация</span>
+            <strong class="orientation">
+              <span class="orientation-glyph" id="orientation-glyph" aria-hidden="true"></span>
+              <span id="orientation-value">Горизонтальная</span>
+            </strong>
+          </article>
+          <article class="metric">
+            <span class="metric-label">Пиксели</span>
+            <strong id="pixels-value">2.07 МП</strong>
+          </article>
+        </section>
+
+        <section class="controls" aria-label="Размер кадра">
+          <label class="field" for="width-input">
+            <span>Ширина</span>
+            <span class="input-shell">
+              <input id="width-input" inputmode="numeric" autocomplete="off" value="1920" />
+              <span>px</span>
+            </span>
+          </label>
+
+          <button class="icon-button" id="swap-button" type="button" aria-label="Поменять ширину и высоту" title="Поменять местами">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M7 7h12l-3.5-3.5"></path>
+              <path d="M19 7l-3.5 3.5"></path>
+              <path d="M17 17H5l3.5 3.5"></path>
+              <path d="M5 17l3.5-3.5"></path>
+            </svg>
+          </button>
+
+          <label class="field" for="height-input">
+            <span>Высота</span>
+            <span class="input-shell">
+              <input id="height-input" inputmode="numeric" autocomplete="off" value="1080" />
+              <span>px</span>
+            </span>
+          </label>
+        </section>
+
+        <section class="presets-section" aria-labelledby="presets-title">
+          <h2 id="presets-title">Быстрые форматы</h2>
+          <div class="presets" id="presets"></div>
+        </section>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
