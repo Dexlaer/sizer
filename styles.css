@@ -696,15 +696,15 @@ body.is-resizing .frame-wrap {
 }
 
 .support {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
   margin-top: 24px;
   padding-top: 16px;
   border-top: 1px solid var(--line);
   color: var(--muted);
   font-size: 13px;
+  text-align: center;
 }
 
 .support-button {
@@ -712,6 +712,7 @@ body.is-resizing .frame-wrap {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   border: 1px solid rgba(245, 165, 36, 0.46);
   border-radius: 8px;
   background: rgba(245, 165, 36, 0.1);
