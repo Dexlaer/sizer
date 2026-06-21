@@ -1,4 +1,4 @@
-const CACHE_NAME = "frame-size-v2";
+const CACHE_NAME = "frame-size-v3";
 const ASSETS = [
   "./",
   "./index.html",
